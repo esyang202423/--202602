@@ -3,7 +3,7 @@ import {
   Plus, Edit2, X, Trash2, MapPin, 
   ExternalLink, Image as ImageIcon, CheckCircle, 
   ChevronDown, MessageSquare, Info, Star, ChevronRight, Clock,
-  Coins, PlaneTakeoff, Heart, AlertCircle, Coffee, Anchor
+  Coins, PlaneTakeoff, Heart
 } from 'lucide-react';
 
 // --- 1. 定義類型 (原本在 types.ts) ---
@@ -171,7 +171,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FBFF] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F8FBFF] flex flex-col">
       {/* Hero Section */}
       <section className="relative h-[55vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
@@ -184,13 +184,13 @@ const App: React.FC = () => {
         </div>
         <div className="relative z-10 text-center text-white px-6 mt-[-40px]">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-white/40 bg-white/20 backdrop-blur-lg rounded-full text-[10px] font-bold uppercase tracking-[0.2em] mb-6">
-            <Heart size={12} className="text-red-400 fill-red-400" /> Feb 12 - 18, 2026
+            <Heart size={12} className="text-red-400 fill-red-400" /> Feb 12 - 18, 2025
           </div>
-          <h1 className="text-4xl font-extrabold mb-4 tracking-tight leading-tight drop-shadow-lg">
+          <h1 className="text-4xl font-extrabold mb-4 tracking-tight leading-tight">
             新春揚揚得意<br/><span className="text-sky-300">菲律賓之旅</span>
           </h1>
-          <p className="text-sm font-medium opacity-90 max-w-xs mx-auto leading-relaxed drop-shadow-md">
-            宿霧春節 ‧ 薄荷海島 ‧ 跳島探險
+          <p className="text-sm font-medium opacity-90 max-w-xs mx-auto leading-relaxed">
+            宿霧跨年 ‧ 薄荷海島 ‧ 跳島探險
           </p>
         </div>
       </section>
@@ -212,7 +212,7 @@ const App: React.FC = () => {
               <input 
                 type="number"
                 placeholder="輸入金額"
-                className="w-full bg-gray-50 border-none rounded-xl py-3 px-4 font-bold text-lg focus:ring-2 focus:ring-sky-200 outline-none text-gray-700"
+                className="w-full bg-gray-50 border-none rounded-xl py-3 px-4 font-bold text-lg focus:ring-2 focus:ring-sky-200 outline-none"
                 value={phpAmount}
                 onChange={(e) => setPhpAmount(e.target.value)}
               />
@@ -263,7 +263,8 @@ const App: React.FC = () => {
               <div className="flex items-end justify-between mb-8 px-2">
                 <div className="flex items-center gap-4">
                   <div className="relative">
-                    <div className="w-14 h-14 rounded-3xl bg-gradient-to-br from-sky-400 to-blue-600 rotate-3 flex flex-col items-center justify-center text-white font-bold shadow-lg shadow-sky-200">
+                    {/* 修正點：這裡原本是 ocean-gradient，我改成 Tailwind 原生語法，確保顏色會顯示 */}
+                    <div className="w-14 h-14 rounded-3xl bg-gradient-to-r from-sky-400 to-cyan-300 rotate-3 flex flex-col items-center justify-center text-white font-bold shadow-lg shadow-sky-200">
                       <span className="text-[10px] opacity-80 leading-none mb-0.5">{day.date.split('/')[0]}月</span>
                       <span className="text-xl leading-none">{day.date.split('/')[1]}</span>
                     </div>
@@ -365,14 +366,15 @@ const App: React.FC = () => {
           <div className="bg-sky-600 w-16 h-16 rounded-3xl flex items-center justify-center text-white mb-8 mx-auto shadow-xl shadow-sky-200 rotate-12">
             <Star size={32} fill="white" />
           </div>
-          <h2 className="text-3xl font-black mb-4 text-gray-900">楊家得意 精彩旅程</h2>
+          <h2 className="text-3xl font-black mb-4 text-gray-900">揚揚得意 精彩旅程</h2>
           <p className="text-sm text-gray-400 mb-10 leading-loose">
             所有的規劃，都是為了在遇見風景的那一刻，<br/>
             能露出最自信燦爛的笑容。
           </p>
           <button 
             onClick={() => setShowConclusion(true)}
-            className="w-full py-5 bg-gradient-to-r from-sky-400 to-blue-600 text-white rounded-[2rem] font-black text-lg shadow-xl shadow-sky-400/30 flex items-center justify-center gap-3 active:scale-[0.97] transition-all"
+            // 修正點：這裡原本是 ocean-gradient，我改成 Tailwind 原生語法
+            className="w-full py-5 bg-gradient-to-r from-sky-400 to-cyan-300 text-white rounded-[2rem] font-black text-lg shadow-xl shadow-sky-400/30 flex items-center justify-center gap-3 active:scale-[0.97] transition-all"
           >
             獲取旅程祝福 <Info size={22} />
           </button>
@@ -383,10 +385,10 @@ const App: React.FC = () => {
       <footer className="py-12 bg-white text-gray-300 text-center text-[10px] font-bold uppercase tracking-widest border-t border-gray-50">
         <div className="flex items-center justify-center gap-2 mb-2">
           <div className="w-1 h-1 rounded-full bg-sky-200"></div>
-          <span>Bohol Adventure 2026</span>
+          <span>Bohol Adventure 2025</span>
           <div className="w-1 h-1 rounded-full bg-sky-200"></div>
         </div>
-        <p>© 新春楊家得意 菲律賓之旅</p>
+        <p>© 新春揚揚得意 菲律賓之旅</p>
       </footer>
 
       {/* Modals */}
@@ -416,7 +418,8 @@ const App: React.FC = () => {
             </div>
             <button 
               onClick={() => setShowConclusion(false)}
-              className="w-full py-5 bg-gradient-to-r from-sky-400 to-blue-600 text-white rounded-[2rem] font-black text-lg shadow-lg active:scale-95 transition-all"
+              // 修正點：同樣修正 ocean-gradient
+              className="w-full py-5 bg-gradient-to-r from-sky-400 to-cyan-300 text-white rounded-[2rem] font-black text-lg shadow-lg active:scale-95 transition-all"
             >
               開啟夢幻假期
             </button>
