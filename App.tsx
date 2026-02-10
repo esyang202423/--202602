@@ -221,10 +221,10 @@ const App: React.FC = () => {
             <Heart size={12} className="text-red-400 fill-red-400" /> Feb 12 - 18, 2026
           </div>
           <h1 className="text-4xl font-extrabold mb-4 tracking-tight leading-tight drop-shadow-lg">
-            新春揚揚得意<br/><span className="text-sky-300">菲律賓之旅</span>
+            新春楊家得意<br/><span className="text-sky-300">菲律賓之旅</span>
           </h1>
           <p className="text-sm font-medium opacity-90 max-w-xs mx-auto leading-relaxed drop-shadow-md">
-            宿霧跨年 ‧ 薄荷海島 ‧ 跳島探險
+            宿霧春節 ‧ 薄荷海島 ‧ 跳島探險
           </p>
         </div>
       </section>
