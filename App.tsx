@@ -3,7 +3,8 @@ import {
   Plus, Edit2, X, Trash2, MapPin, 
   ExternalLink, Image as ImageIcon, CheckCircle, 
   ChevronDown, MessageSquare, Info, Star, ChevronRight, Clock,
-  Coins, PlaneTakeoff, Heart, Upload, Link as LinkIcon, MessageCircleQuestion
+  Coins, PlaneTakeoff, Heart, Upload, Link as LinkIcon, MessageCircleQuestion,
+  Clipboard // 新增這個圖示
 } from 'lucide-react';
 
 // --- 1. 定義類型 ---
@@ -204,6 +205,18 @@ const App: React.FC = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  // 處理「一鍵貼上」功能
+  const handlePasteLocation = async (dayId: string, activityId: string) => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        handleUpdateActivity(dayId, activityId, { locationUrl: text });
+      }
+    } catch (error) {
+      alert('無法存取剪貼簿，請長按輸入框手動貼上');
+    }
   };return (
     <div className="min-h-screen bg-[#F8FBFF] flex flex-col font-sans">
       {/* Hero Section */}
@@ -221,7 +234,7 @@ const App: React.FC = () => {
             <Heart size={12} className="text-red-400 fill-red-400" /> Feb 12 - 18, 2026
           </div>
           <h1 className="text-4xl font-extrabold mb-4 tracking-tight leading-tight drop-shadow-lg">
-            新春楊家得意<br/><span className="text-sky-300">菲律賓之旅</span>
+            新春楊家得意<br/><span className="text-sky-300">藍海之旅</span>
           </h1>
           <p className="text-sm font-medium opacity-90 max-w-xs mx-auto leading-relaxed drop-shadow-md">
             宿霧春節 ‧ 薄荷海島 ‧ 跳島探險
@@ -334,14 +347,26 @@ const App: React.FC = () => {
                             onChange={(e) => handleUpdateActivity(day.id, activity.id, { description: e.target.value })}
                             placeholder="活動描述 (含 Emoji)"
                           />
-                          <div className="relative">
-                            <MapPin size={16} className="absolute left-3 top-3 text-gray-400" />
-                            <input 
-                              className="w-full p-3 pl-10 bg-gray-50 border-none rounded-2xl text-xs text-blue-600" 
-                              value={activity.locationUrl || ''} 
-                              onChange={(e) => handleUpdateActivity(day.id, activity.id, { locationUrl: e.target.value })}
-                              placeholder="貼上 Google Map 連結..."
-                            />
+                          
+                          {/* 地圖輸入框區塊 - 包含一鍵貼上功能 */}
+                          <div className="relative flex items-center gap-2">
+                            <div className="relative flex-1">
+                                <MapPin size={16} className="absolute left-3 top-3 text-gray-400" />
+                                <input 
+                                  type="url" /* 改為 URL 格式，優化手機鍵盤 */
+                                  className="w-full p-3 pl-10 bg-gray-50 border-none rounded-2xl text-base text-blue-600" /* text-base 解決 iPhone 縮放與難貼上問題 */
+                                  value={activity.locationUrl || ''} 
+                                  onChange={(e) => handleUpdateActivity(day.id, activity.id, { locationUrl: e.target.value })}
+                                  placeholder="貼上 Google Map 連結..."
+                                />
+                            </div>
+                            <button 
+                                onClick={() => handlePasteLocation(day.id, activity.id)}
+                                className="p-3 bg-gray-100 text-gray-600 rounded-2xl active:scale-95 transition-all hover:bg-gray-200"
+                                title="貼上連結"
+                            >
+                                <Clipboard size={18} />
+                            </button>
                           </div>
                           
                           <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-2xl">
@@ -427,7 +452,7 @@ const App: React.FC = () => {
           </div>
           <h2 className="text-3xl font-black mb-4 text-gray-900">楊家得意 精彩旅程</h2>
           <p className="text-sm text-gray-400 mb-10 leading-loose">
-            所有的規劃，都是在放鬆度假的時刻，<br/>
+            不可以吵架，<br/>
           </p>
           <button 
             onClick={() => setShowConclusion(true)}
