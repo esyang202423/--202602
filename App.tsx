@@ -80,7 +80,7 @@ const INITIAL_TRIP_DATA: TripDay[] = [
   {
     id: 'day-3',
     date: '2/14',
-    title: '八里卡薩跳島與海豚',
+    title: '八里卡薩跳島與海豚 (旅行社包)',
     activities: [
       { id: '3-1', time: '06:00', description: '🍟 麥當勞集合出發', notes: '早起才有機會看到海豚跳耀哦！' },
       { id: '3-2', time: '上午', description: '🐢 巴里卡薩島浮潛', notes: '找海龜、看絕美大斷層' },
@@ -425,10 +425,9 @@ const App: React.FC = () => {
           <div className="bg-sky-600 w-16 h-16 rounded-3xl flex items-center justify-center text-white mb-8 mx-auto shadow-xl shadow-sky-200 rotate-12">
             <Star size={32} fill="white" />
           </div>
-          <h2 className="text-3xl font-black mb-4 text-gray-900">揚揚得意 精彩旅程</h2>
+          <h2 className="text-3xl font-black mb-4 text-gray-900">楊家得意 精彩旅程</h2>
           <p className="text-sm text-gray-400 mb-10 leading-loose">
-            所有的規劃，都是為了在遇見風景的那一刻，<br/>
-            能露出最自信燦爛的笑容。
+            所有的規劃，都是在放鬆度假的時刻，<br/>
           </p>
           <button 
             onClick={() => setShowConclusion(true)}
@@ -446,7 +445,7 @@ const App: React.FC = () => {
           <span>Bohol Adventure 2025</span>
           <div className="w-1 h-1 rounded-full bg-sky-200"></div>
         </div>
-        <p>© 新春揚揚得意 菲律賓之旅</p>
+        <p>© 新春楊家得意 開春好運</p>
       </footer>
 
       {/* Modals */}
@@ -468,7 +467,7 @@ const App: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center px-6 bg-sky-950/60 backdrop-blur-xl transition-opacity">
           <div className="bg-white w-full max-w-sm rounded-[3.5rem] shadow-2xl overflow-hidden p-12 text-center relative border-[6px] border-sky-50">
             <div className="text-5xl mb-8">🧧</div>
-            <h3 className="text-2xl font-black mb-8 text-gray-900 leading-tight">給親愛旅人的話</h3>
+            <h3 className="text-2xl font-black mb-8 text-gray-900 leading-tight">給家人的話</h3>
             <div className="bg-sky-50/50 p-8 rounded-[2.5rem] mb-10 border border-sky-100">
               <p className="text-lg text-sky-900 font-bold italic leading-relaxed">
                 「{CORE_CONCLUSION}」
