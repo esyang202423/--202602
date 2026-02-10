@@ -3,7 +3,7 @@ import {
   Plus, Edit2, X, Trash2, MapPin, 
   ExternalLink, Image as ImageIcon, CheckCircle, 
   ChevronDown, MessageSquare, Info, Star, ChevronRight, Clock,
-  Coins, PlaneTakeoff, Heart, Upload, Link as LinkIcon
+  Coins, PlaneTakeoff, Heart, Upload, Link as LinkIcon, MessageCircleQuestion
 } from 'lucide-react';
 
 // --- 1. 定義類型 ---
@@ -482,6 +482,20 @@ const App: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* --- AI 懸浮按鈕開始 --- */}
+      <a
+        href="https://gemini.google.com/gem/1t7EoJwRrG68P_P3OH5kVpUdbqP92BuL_?usp=sharing" 
+        target="_blank"
+        rel="noreferrer"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full shadow-2xl hover:scale-105 transition-all duration-300 animate-bounce"
+        style={{ animationDuration: '3s' }}
+      >
+        <MessageCircleQuestion size={24} fill="white" className="text-purple-600" />
+        <span className="font-bold text-sm tracking-wide">問問 AI 導遊</span>
+      </a>
+      {/* --- AI 懸浮按鈕結束 --- */}
+
     </div>
   );
 };
