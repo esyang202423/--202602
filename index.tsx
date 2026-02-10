@@ -1,16 +1,10 @@
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-
-const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
-}
-
-const root = ReactDOM.createRoot(rootElement);
-root.render(
+// 這裡我們直接啟動 App，不做任何額外的路由設定，確保畫面一定出得來
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
-);
+  </React.StrictMode>,
+)
