@@ -4,7 +4,7 @@ import {
   ExternalLink, Image as ImageIcon, CheckCircle, 
   ChevronDown, MessageSquare, Info, Star, ChevronRight, Clock,
   Coins, PlaneTakeoff, Heart, Upload, Link as LinkIcon, MessageCircleQuestion,
-  Clipboard // 新增這個圖示
+  Clipboard, RotateCcw
 } from 'lucide-react';
 
 // --- 1. 定義類型 ---
@@ -12,8 +12,8 @@ interface Activity {
   id: string;
   time: string;
   description: string;
-  locationUrl?: string; // 地圖連結
-  imageUrl?: string;    // 照片連結 (Base64)
+  locationUrl?: string;
+  imageUrl?: string;
   notes?: string;
 }
 
@@ -87,15 +87,18 @@ const INITIAL_TRIP_DATA: TripDay[] = [
       { id: '3-2', time: '上午', description: '🐢 巴里卡薩島浮潛', notes: '找海龜、看絕美大斷層' },
       { id: '3-3', time: '11:00', description: '🍗 點心 Jollibee', notes: '必吃的菲律賓小蜜蜂炸雞' },
       { id: '3-4', time: '下午', description: '💆 飯店休息 / 按摩', notes: 'SPA 舒壓時間' },
-      { id: '3-5', time: '18:00', description: '✨ 彈性：看螢火蟲', notes: '或前往 Hinagdanan Cave 洞穴探險' }
+      { id: '3-5', time: '18:30', description: '🌌 羅伯河螢火蟲生態之旅', notes: '搭乘螃蟹船，欣賞如聖誕樹般的螢火蟲光海' }
     ]
   },
   {
     id: 'day-4',
     date: '2/15',
-    title: '自由活動日',
+    title: '沙丁魚與洞穴探險',
     activities: [
-      { id: '4-1', time: '全日', description: '🏝️ 隨心所欲自由行', notes: '建議：可報名鯨鯊共游或 Napaling 看沙丁魚風暴' }
+      { id: '4-1', time: '09:00', description: '🐟 Napaling 納帕靈沙丁魚風暴', notes: '著名的斷層懸崖，浮潛即可看到壯觀魚球！' },
+      { id: '4-2', time: '12:00', description: '🍽️ 午餐時光', notes: '補充體力，準備下午探險' },
+      { id: '4-3', time: '14:30', description: '🕳️ Hinagdanan Cave 鐘乳石洞穴', notes: '神奇的地下湖泊，水質清澈涼爽，可在此游泳拍照' },
+      { id: '4-4', time: '17:30', description: '🌅 夕陽與晚餐', notes: '推薦 North Zen 看夕陽或海邊晚餐' }
     ]
   },
   {
@@ -135,17 +138,35 @@ const INITIAL_TRIP_DATA: TripDay[] = [
 
 // --- 3. 主要元件 (App) ---
 const App: React.FC = () => {
-  const [trip, setTrip] = useState<TripDay[]>(INITIAL_TRIP_DATA);
+  // 🔥 版本升級：改為 v2，強迫讀取新的行程資料
+  const [trip, setTrip] = useState<TripDay[]>(() => {
+    try {
+      const savedTrip = localStorage.getItem('myTripData_v2');
+      return savedTrip ? JSON.parse(savedTrip) : INITIAL_TRIP_DATA;
+    } catch (e) {
+      console.error("讀取存檔失敗", e);
+      return INITIAL_TRIP_DATA;
+    }
+  });
+
   const [activeTip, setActiveTip] = useState<Tip | null>(null);
   const [showConclusion, setShowConclusion] = useState(false);
   const [editingActivity, setEditingActivity] = useState<{dayId: string, activityId: string} | null>(null);
-  
-  // Currency Converter State
   const [phpAmount, setPhpAmount] = useState<string>('');
-  const rate = 0.56; // 1 PHP = 0.56 TWD
-
+  const rate = 0.56; 
   const observerRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
+  // 🔥 存檔邏輯 (存入 v2)
+  useEffect(() => {
+    try {
+      localStorage.setItem('myTripData_v2', JSON.stringify(trip));
+    } catch (e) {
+      console.error("存檔失敗", e);
+      alert("⚠️ 提醒：圖片可能過大導致無法儲存，建議使用文字或連結即可！");
+    }
+  }, [trip]);
+
+  // 動畫效果 Observe
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -195,7 +216,6 @@ const App: React.FC = () => {
     }
   };
 
-  // 處理圖片上傳
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, dayId: string, activityId: string) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -207,7 +227,6 @@ const App: React.FC = () => {
     }
   };
 
-  // 處理「一鍵貼上」功能
   const handlePasteLocation = async (dayId: string, activityId: string) => {
     try {
       const text = await navigator.clipboard.readText();
@@ -216,6 +235,15 @@ const App: React.FC = () => {
       }
     } catch (error) {
       alert('無法存取剪貼簿，請長按輸入框手動貼上');
+    }
+  };
+
+  // 重置功能 (清除 v2)
+  const handleResetData = () => {
+    if (confirm('確定要重置所有行程嗎？這會清除你所有的修改喔！')) {
+      localStorage.removeItem('myTripData_v2');
+      setTrip(INITIAL_TRIP_DATA);
+      alert('已恢復成預設行程！');
     }
   };return (
     <div className="min-h-screen bg-[#F8FBFF] flex flex-col font-sans">
@@ -234,7 +262,7 @@ const App: React.FC = () => {
             <Heart size={12} className="text-red-400 fill-red-400" /> Feb 12 - 18, 2026
           </div>
           <h1 className="text-4xl font-extrabold mb-4 tracking-tight leading-tight drop-shadow-lg">
-            新春楊家得意<br/><span className="text-sky-300">藍海之旅</span>
+            新春楊家得意<br/><span className="text-sky-300">HAPPY之旅</span>
           </h1>
           <p className="text-sm font-medium opacity-90 max-w-xs mx-auto leading-relaxed drop-shadow-md">
             宿霧春節 ‧ 薄荷海島 ‧ 跳島探險
@@ -348,13 +376,13 @@ const App: React.FC = () => {
                             placeholder="活動描述 (含 Emoji)"
                           />
                           
-                          {/* 地圖輸入框區塊 - 包含一鍵貼上功能 */}
+                          {/* 地圖輸入框區塊 */}
                           <div className="relative flex items-center gap-2">
                             <div className="relative flex-1">
                                 <MapPin size={16} className="absolute left-3 top-3 text-gray-400" />
                                 <input 
-                                  type="url" /* 改為 URL 格式，優化手機鍵盤 */
-                                  className="w-full p-3 pl-10 bg-gray-50 border-none rounded-2xl text-base text-blue-600" /* text-base 解決 iPhone 縮放與難貼上問題 */
+                                  type="url" 
+                                  className="w-full p-3 pl-10 bg-gray-50 border-none rounded-2xl text-base text-blue-600" 
                                   value={activity.locationUrl || ''} 
                                   onChange={(e) => handleUpdateActivity(day.id, activity.id, { locationUrl: e.target.value })}
                                   placeholder="貼上 Google Map 連結..."
@@ -452,7 +480,7 @@ const App: React.FC = () => {
           </div>
           <h2 className="text-3xl font-black mb-4 text-gray-900">楊家得意 精彩旅程</h2>
           <p className="text-sm text-gray-400 mb-10 leading-loose">
-            不可以吵架，<br/>
+            所有的規劃，都是在放鬆度假的時刻，<br/>
           </p>
           <button 
             onClick={() => setShowConclusion(true)}
@@ -463,14 +491,22 @@ const App: React.FC = () => {
         </section>
       </main>
 
-      {/* Footer */}
+      {/* Footer (含重置按鈕) */}
       <footer className="py-12 bg-white text-gray-300 text-center text-[10px] font-bold uppercase tracking-widest border-t border-gray-50">
         <div className="flex items-center justify-center gap-2 mb-2">
           <div className="w-1 h-1 rounded-full bg-sky-200"></div>
           <span>Bohol Adventure 2025</span>
           <div className="w-1 h-1 rounded-full bg-sky-200"></div>
         </div>
-        <p>© 新春楊家得意 開春好運</p>
+        <p className="mb-4">© 新春楊家得意 開春好運</p>
+        
+        {/* 重置按鈕 */}
+        <button 
+          onClick={handleResetData}
+          className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 rounded-full text-gray-400 hover:bg-gray-200 transition-colors"
+        >
+          <RotateCcw size={10} /> 重置行程
+        </button>
       </footer>
 
       {/* Modals */}
